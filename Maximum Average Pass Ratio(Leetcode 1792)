@@ -1,0 +1,29 @@
+class Solution {
+    public double cal(int p, int n) {
+        return ((double) (p + 1) / (n + 1) -(double) p / n);
+    }
+    public double maxAverageRatio(int[][] classes, int extraStudents) {
+        PriorityQueue<double[]> pq = new PriorityQueue<>((a, b) ->Double.compare(b[0], a[0]));
+        for (int[] arr : classes) {
+            int p = arr[0];
+            int n = arr[1];
+            double g = cal(p, n);
+            pq.offer(new double[] { g, p, n });
+        }
+        while (extraStudents-- > 0) {
+            double[] arr = pq.poll();
+            double currentGain = arr[0];
+            int p = (int) arr[1];
+            int n = (int) arr[2];
+            pq.offer(new double[] {cal(p + 1, n + 1),p + 1,n + 1,});
+        }
+        double ratio = 0;
+        while (!pq.isEmpty()) {
+            double[] arr = pq.poll();
+            int p = (int) arr[1];
+            int n = (int) arr[2];
+            ratio += (double) p / n;
+        }
+        return ratio / classes.length;
+    }
+}
